@@ -1,20 +1,93 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://ai.google.dev/static/site-assets/images/share-ais-513315318.png" />
-</div>
+<h1 align="center">🎓 Campus Connect</h1>
 
-# Run and deploy your AI Studio app
+<p align="center">
+  <img src="./assets/landing.png" alt="Campus Connect Landing Page" width="100%" />
+</p>
 
-This contains everything you need to run your app locally.
+<p align="center">
+  A modern web platform to manage and report campus and classroom issues efficiently.
+</p>
 
-View your app in AI Studio: https://ai.studio/apps/5817f97e-b9c8-42f7-bdd5-fcd6bb08a1e5
+---
 
-## Run Locally
+## 🚀 Live Demo
+🔗 https://campus-connect-ten-ochre.vercel.app/
 
-**Prerequisites:**  Node.js
+---
+
+## 📌 Problem Statement
+
+In many colleges, students face issues like:
+
+- Infrastructure problems 🏫  
+- Classroom complaints 📚  
+- Communication gaps with faculty 👨‍🏫  
+
+**Campus Connect** solves this by providing a centralized platform where:
+
+- Students can report issues  
+- CRs can manage class problems  
+- Faculty can monitor and respond  
+
+---
+
+## ✨ Features
+
+### 👨‍🎓 Student
+- Raise complaints
+- Upload images
+- Track issue status
+
+### 🧑‍🏫 CR (Class Representative)
+- Manage class-specific issues
+- Monitor submissions
+- Organized dashboard
+
+### 👨‍🏫 Faculty
+- View all issues
+- Respond and take action
+- Analytics dashboard
+
+---
+
+## 🖼️ Screenshots
 
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+### 📊 Campus Issues
+![Dashboard](./assets/campusIssues.png)
+
+
+
+### 📊 CR Dashboard
+![Dashboard](./assets/crDashboard.png)
+
+
+### 📊 Faculty Dashboard
+![Dashboard](./assets/facultyDashboard.png)
+
+
+---
+
+## 🛠️ Tech Stack
+
+- ⚛️ React + TypeScript  
+- 🎨 Tailwind CSS  
+- 🔥 Supabase (Auth + Database + Storage)  
+- ⚡ Vite  
+
+---
+
+## 🔐 Authentication & Security
+
+- Supabase Authentication  
+- Role-based access control  
+- Row Level Security (RLS)  
+
+---
+
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/your-username/campus-connect.git
+cd campus-connect
+npm install
