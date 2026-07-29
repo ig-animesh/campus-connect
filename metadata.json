@@ -1,0 +1,6 @@
+{
+  "name": "Campus Connect",
+  "description": "A premium modern Campus Issue Management System for connecting students with college administration.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
