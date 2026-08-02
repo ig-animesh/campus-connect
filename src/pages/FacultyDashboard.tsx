@@ -9,14 +9,16 @@ import { Navigate } from 'react-router';
 import { cn } from '../lib/utils';
 
 export function FacultyDashboard() {
+
   const { profile } = useAuth();
   const [filterSection, setFilterSection] = useState<string>('All');
+  const [filterYear, setFilterYear] = useState<string>('All');
   const [selectedIssue, setSelectedIssue] = useState<any | null>(null);
   
   const queryClient = useQueryClient();
 
   const { data: issues, isLoading } = useQuery({
-    queryKey: ['faculty_issues', filterSection],
+    queryKey: ['faculty_issues', filterSection, filterYear],
     queryFn: async () => {
       let query = supabase
         .from('class_issues')
@@ -32,6 +34,9 @@ export function FacultyDashboard() {
 
       if (filterSection !== 'All') {
         query = query.eq('section', filterSection);
+      }
+      if (filterYear !== 'All') {
+        query = query.eq('year', filterYear);
       }
       
       const { data, error } = await query;
@@ -75,20 +80,40 @@ export function FacultyDashboard() {
             {profile.designation}
           </div>
           
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-700">Filter by Section</span>
-            <select
-              value={filterSection}
-              onChange={(e) => setFilterSection(e.target.value)}
-              className="rounded-xl border border-gray-200 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 outline-none transition-colors bg-white min-w-[120px]"
-            >
-              <option value="All">All</option>
-              <option value="A">Section A</option>
-              <option value="B">Section B</option>
-              <option value="C">Section C</option>
-              <option value="D">Section D</option>
-            </select>
-          </div>
+          <div className="flex items-center gap-4">
+
+              {/* Year Filter */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-700">Year</span>
+                <select
+                  value={filterYear}
+                  onChange={(e) => setFilterYear(e.target.value)}
+                  className="rounded-xl border border-gray-200 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option value="All">All</option>
+                  <option value="1">1st Year</option>
+                  <option value="2">2nd Year</option>
+                  <option value="3">3rd Year</option>
+                </select>
+              </div>
+
+              {/* Section Filter */}
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-medium text-gray-700">Section</span>
+                <select
+                  value={filterSection}
+                  onChange={(e) => setFilterSection(e.target.value)}
+                  className="rounded-xl border border-gray-200 px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 outline-none bg-white"
+                >
+                  <option value="All">All</option>
+                  <option value="A">Section A</option>
+                  <option value="B">Section B</option>
+                  <option value="C">Section C</option>
+                  <option value="D">Section D</option>
+                </select>
+              </div>
+
+        </div>
         </div>
       </div>
 

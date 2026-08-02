@@ -14,8 +14,24 @@ const signupSchema = z.object({
   password: z.string().min(6, 'Password must be at least 6 characters'),
   confirmPassword: z.string(),
   role: z.enum(['CR', 'Faculty']),
-  section: z.enum(['A', 'B', 'C', 'D']).optional(),
-  designation: z.enum(['Class Coordinator', 'HOD', 'Dean']).optional(),
+  department: z.preprocess(
+  (val) => val === "" ? undefined : val,
+  z.enum(['BCA', 'BBA'])
+).refine((val) => val !== undefined, {
+  message: "Department is required",
+}),
+  year: z.preprocess(
+  (val) => val === "" ? undefined : val,
+  z.enum(['1','2','3']).optional()
+),
+  section: z.preprocess(
+  (val) => val === "" ? undefined : val,
+  z.enum(['A', 'B', 'C', 'D']).optional()
+),
+  designation: z.preprocess(
+  (val) => val === "" ? undefined : val,
+  z.enum(['Class Coordinator', 'HOD', 'Dean']).optional()
+),
 }).refine((data) => data.password === data.confirmPassword, {
   message: "Passwords don't match",
   path: ["confirmPassword"],
@@ -31,6 +47,12 @@ const signupSchema = z.object({
 }, {
   message: "Designation is required for Faculty",
   path: ["designation"],
+}).refine((data) => {
+  if (data.role === 'CR' && !data.year) return false;
+  return true;
+}, {
+  message: "Year is required for CR",
+  path: ["year"],
 });
 
 type SignupFormData = z.infer<typeof signupSchema>;
@@ -70,7 +92,6 @@ export function SignupPage() {
 
 const onSubmit = async (data: SignupFormData) => {
   console.log(data);
-
   setIsLoading(true);
 
   try {
@@ -90,23 +111,33 @@ const onSubmit = async (data: SignupFormData) => {
             name: data.name,
             email: data.email,
             role: data.role,
-            section: data.role === "CR" ? data.section : null,
+            department: data.department,
+            year:
+              data.role === "CR" && data.year
+                ? data.year
+                : null,
+            section:
+              data.role === "CR" && data.section
+                ? data.section
+                : null,
             designation:
               data.role === "Faculty" ? data.designation : null,
           },
         ]);
 
       if (profileError) throw profileError;
-
-      toast.success("Account created successfully");
     }
-  } catch (error: any) {
+
+    toast.success("Account created successfully");
+    navigate('/login');
+
+  } catch (error) {
     console.error(error);
-    toast.error(error.message);
+    toast.error((error as any).message);
+  } finally {
     setIsLoading(false);
   }
 };
-
   return (
     <div className="flex flex-col items-center justify-center min-h-[calc(100vh-16rem)] py-12">
       <div className="w-full max-w-2xl bg-white rounded-3xl p-8 sm:p-10 shadow-sm border border-gray-100">
@@ -200,6 +231,47 @@ const onSubmit = async (data: SignupFormData) => {
                 <p className="mt-1 text-sm text-red-600">{errors.role.message}</p>
               )}
             </div>
+
+            <div>
+  <label className="block text-sm font-medium text-gray-700 mb-1">
+    Department
+  </label>
+  <select
+    {...register('department')}
+    className="w-full rounded-xl border border-gray-200 px-4 py-3"
+  >
+    <option value="">Select Department</option>
+    <option value="BCA">BCA</option>
+    <option value="BBA">BBA</option>
+  </select>
+  {errors.department && (
+    <p className="mt-1 text-sm text-red-600">
+      {errors.department.message}
+    </p>
+  )}
+</div>
+
+            {selectedRole === 'CR' && (
+  <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      Year
+    </label>
+    <select
+      {...register('year')}
+      className="w-full rounded-xl border border-gray-200 px-4 py-3"
+    >
+      <option value="">Select Year</option>
+      <option value="1">1st Year</option>
+      <option value="2">2nd Year</option>
+      <option value="3">3rd Year</option>
+    </select>
+    {errors.year && (
+      <p className="mt-1 text-sm text-red-600">
+        {errors.year.message}
+      </p>
+    )}
+  </div>
+)}
 
             {selectedRole === 'CR' && (
               <div>

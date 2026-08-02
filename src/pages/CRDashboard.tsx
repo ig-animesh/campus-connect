@@ -41,6 +41,8 @@ export function CRDashboard() {
         .select('*')
         .eq('cr_id', user!.id)
         .order('created_at', { ascending: false });
+
+        console.log("PROFILE DATA 👉", profile);
       
       if (error) throw error;
       return data as any[];
@@ -59,6 +61,8 @@ export function CRDashboard() {
       const payload = {
         cr_id: user!.id,
         section: profile!.section as 'A' | 'B' | 'C' | 'D',
+        department: profile!.department, 
+        year: profile?.year ?? null,           
         title: data.title,
         description: data.description,
         image_url: imageUrl,
